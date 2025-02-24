@@ -41,16 +41,39 @@
 project/
 │
 ├── audio/                    # 训练用音频文件目录
+│   ├── 白菜.m4a             # 白菜咀嚼声样本1
+│   ├── 白菜2.m4a            # 白菜咀嚼声样本2
+│   ├── 米饭.m4a             # 米饭咀嚼声样本
+│   ├── 豆皮.m4a             # 豆皮咀嚼声样本
+│   ├── 鸡皮.m4a             # 鸡皮咀嚼声样本1
+│   └── 鸡皮2.m4a            # 鸡皮咀嚼声样本2
+│
 ├── audiofortest/            # 测试用音频文件目录
+│   └── baicai_fortest.m4a  # 测试用白菜咀嚼声样本
+│
 ├── spectrograms/            # 频谱图输出目录（自动创建）
 │
 ├── gui_main.py              # 图形界面主程序
 ├── audio_spectrogram.py     # 频谱图生成模块
 ├── food_classifier.py       # 主分类器模块
 ├── requirements.txt         # 项目依赖
-├── model.joblib            # 保存的模型文件（训练后生成）
-└── scaler.joblib          # 保存的特征缩放器（训练后生成）
+├── model.joblib            # 预训练模型文件
+└── scaler.joblib          # 预训练特征缩放器
 ```
+
+## 音频数据说明
+
+### 训练数据
+- 位于 `audio` 目录
+- 包含四种食物的咀嚼声：白菜、米饭、豆皮、鸡皮
+- 部分食物（如白菜、鸡皮）有多个样本以提高模型鲁棒性
+- 每个音频文件约15-20秒长
+
+### 测试数据
+- 位于 `audiofortest` 目录
+- 提供了示例测试文件 `baicai_fortest.m4a`
+- 用户可以添加自己的测试音频到此目录
+- 支持的音频格式：WAV、MP3、M4A
 
 ## 安装说明
 
@@ -94,23 +117,26 @@ python gui_main.py
 1. **准备训练数据**：
    - 点击"训练用模型文件夹"按钮
    - 将训练音频文件放入打开的audio目录
+   - 注意：项目已包含预训练数据，可直接使用
 
 2. **训练模型**：
    - 点击"训练模型"按钮
    - 等待训练完成
+   - 注意：项目已包含预训练模型，可跳过此步骤直接预测
 
 3. **预测新样本**：
    - 点击"加载音频"选择要分析的音频文件
    - 查看频谱图
    - 点击"开始预测"进行预测
+   - 可以使用 audiofortest/baicai_fortest.m4a 进行测试
 
 ### 3. 命令行方式（可选）
 ```bash
-# 训练模型
+# 训练模型（如果需要重新训练）
 python food_classifier.py
 
 # 预测新样本
-python food_classifier.py audiofortest/test_audio.m4a
+python food_classifier.py audiofortest/baicai_fortest.m4a
 ```
 
 ## 录音建议
