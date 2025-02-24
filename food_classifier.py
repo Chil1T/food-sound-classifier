@@ -378,18 +378,28 @@ def predict_food(audio_path, model, scaler, pca):
         print(f"\n分析音频文件: {audio_path}")
         
         # 提取特征
+        print("正在提取音频特征...")
         features = extract_features(audio_path)
         
         if features is None or len(features) == 0:
             print("无法从音频中提取有效特征")
             return None
             
+        print(f"成功提取特征，形状: {np.array(features).shape}")
+            
         # 特征缩放和PCA转换
+        print("正在进行特征处理...")
         features_scaled = scaler.transform(features)
+        print("✓ 特征缩放完成")
+        
         features_pca = pca.transform(features_scaled)
+        print("✓ PCA转换完成")
+        print(f"转换后特征形状: {features_pca.shape}")
         
         # 预测
+        print("\n开始预测...")
         predictions = model.predict(features_pca)
+        print("✓ 预测完成")
         
         # 统计每种食物类型的片段数量
         unique_predictions, counts = np.unique(predictions, return_counts=True)
@@ -408,6 +418,7 @@ def predict_food(audio_path, model, scaler, pca):
         
     except Exception as e:
         print(f"预测过程出错: {str(e)}")
+        print("详细错误信息:")
         print(traceback.format_exc())
         return None
 
@@ -430,12 +441,25 @@ def load_model(model_path='model.joblib', scaler_path='scaler.joblib',
               pca_path='pca.joblib'):
     """加载模型、缩放器和PCA转换器"""
     try:
+        print(f"正在加载模型文件...")
+        print(f"- 模型文件: {model_path}")
+        print(f"- 缩放器文件: {scaler_path}")
+        print(f"- PCA文件: {pca_path}")
+        
         model = joblib.load(model_path)
+        print("✓ 模型加载成功")
+        
         scaler = joblib.load(scaler_path)
+        print("✓ 缩放器加载成功")
+        
         pca = joblib.load(pca_path)
+        print("✓ PCA转换器加载成功")
+        
         return model, scaler, pca
     except Exception as e:
         print(f"加载模型时出错: {str(e)}")
+        print("详细错误信息:")
+        print(traceback.format_exc())
         return None, None, None
 
 def main():
@@ -452,28 +476,53 @@ def main():
                 print(f"错误：文件 {audio_path} 不存在")
                 return
                 
-            # 加载模型
-            model, scaler, pca = load_model()
-            if model is None:
-                print("错误：无法加载模型，请先训练模型")
-                return
+            try:
+                # 加载模型
+                print("\n正在加载模型...")
+                model, scaler, pca = load_model()
+                if model is None or scaler is None or pca is None:
+                    print("错误：无法加载模型组件，请先训练模型")
+                    return
                 
-            # 预测
-            predict_food(audio_path, model, scaler, pca)
+                # 预测
+                print("\n开始预测过程...")
+                result = predict_food(audio_path, model, scaler, pca)
+                if result is None:
+                    print("预测失败")
+                    
+            except Exception as e:
+                print(f"\n执行过程中出错:")
+                print(f"错误类型: {type(e).__name__}")
+                print(f"错误信息: {str(e)}")
+                print("\n详细错误信息:")
+                print(traceback.format_exc())
+                
         else:
             # 训练模式
             print("开始训练模型...")
-            model, scaler, pca = train_model()
-            if model is not None:
-                save_model(model, scaler, pca)
-                print("\n模型训练完成！")
-                print("\n使用方法:")
-                print("要预测新的音频文件，请运行:")
-                print("python food_classifier.py <音频文件路径>")
+            try:
+                model, scaler, pca = train_model()
+                if model is not None:
+                    save_model(model, scaler, pca)
+                    print("\n模型训练完成！")
+                    print("\n使用方法:")
+                    print("要预测新的音频文件，请运行:")
+                    print("python food_classifier.py <音频文件路径>")
+            except Exception as e:
+                print(f"\n训练过程中出错:")
+                print(f"错误类型: {type(e).__name__}")
+                print(f"错误信息: {str(e)}")
+                print("\n详细错误信息:")
+                print(traceback.format_exc())
                 
     except Exception as e:
-        print(f"程序执行出错: {str(e)}")
+        print(f"\n程序执行出错:")
+        print(f"错误类型: {type(e).__name__}")
+        print(f"错误信息: {str(e)}")
+        print("\n详细错误信息:")
         print(traceback.format_exc())
 
 if __name__ == "__main__":
-    main() 
+    main()
+    # 为了确保错误信息被显示，添加一个输入等待
+    input("\n按回车键继续...") 

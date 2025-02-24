@@ -31,12 +31,21 @@ ENV/
 *.swo
 
 # Project specific
+spectrograms/
+
+# Ignore audio files except in audio and audiofortest directories
 *.wav
 *.mp3
 *.m4a
-model.joblib
-scaler.joblib
-spectrograms/
+!audio/**/*.wav
+!audio/**/*.mp3
+!audio/**/*.m4a
+!audiofortest/**/*.wav
+!audiofortest/**/*.mp3
+!audiofortest/**/*.m4a
 
 # Jupyter Notebook
-.ipynb_checkpoints 
+.ipynb_checkpoints
+
+# Wiki documentation
+wiki.md 
