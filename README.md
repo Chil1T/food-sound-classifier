@@ -177,7 +177,7 @@ py -3.11 audio_spectrogram.py
    - 时频域分析增强
 
 ## 作者
-[您的姓名]
+[Chil1T]
 
 ## 许可证
 MIT License 
