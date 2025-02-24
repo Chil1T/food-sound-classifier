@@ -168,7 +168,7 @@ python food_classifier.py audiofortest/baicai_fortest.m4a
 ## 优化方案总结
 
 ### 1. 特征融合层构建
-为提升模型性能，我们实现了多层特征融合策略（已在version2.0.0实现，但实际状况并不理想）：
+为提升模型性能，我们实现了多层特征融合策略（已在[version2.0.0](https://github.com/Chil1T/food-sound-classifier/tree/optimized-version)实现，但实际状况并不理想）：
 
 #### 1.1 时频域基础特征 (80维)
 - MFCC特征扩展：从13维扩展到20维
